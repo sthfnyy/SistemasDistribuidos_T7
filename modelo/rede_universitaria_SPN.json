@@ -1,0 +1,706 @@
+{
+  "modelName": "rede_universitaria_SPN_",
+  "places": [
+    {
+      "name": "P_Chegada",
+      "initialMarking": 1,
+      "stringMarking": "1",
+      "initialStringMarking": "1",
+      "id": "p1",
+      "x": 80,
+      "y": 300,
+      "labelX": 80,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "P_Pedido",
+      "initialMarking": 0,
+      "stringMarking": "0",
+      "initialStringMarking": "0",
+      "id": "p2",
+      "x": 280,
+      "y": 300,
+      "labelX": 249.26122461055553,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "P_Buffer",
+      "initialMarking": 32,
+      "stringMarking": "K",
+      "initialStringMarking": "K",
+      "id": "p3",
+      "x": 380,
+      "y": 438.82352941176464,
+      "labelX": 351.175384514818,
+      "labelY": 490.7103502345963
+    },
+    {
+      "name": "P_FilaCPU",
+      "initialMarking": 0,
+      "stringMarking": "0",
+      "initialStringMarking": "0",
+      "id": "p4",
+      "x": 480,
+      "y": 300,
+      "labelX": 480,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "P_CPU",
+      "initialMarking": 4,
+      "stringMarking": "N_CPU",
+      "initialStringMarking": "N_CPU",
+      "id": "p5",
+      "x": 680,
+      "y": 182.00332526888644,
+      "labelX": 680,
+      "labelY": 232.12884465150483
+    },
+    {
+      "name": "P_Proc",
+      "initialMarking": 0,
+      "stringMarking": "0",
+      "initialStringMarking": "0",
+      "id": "p6",
+      "x": 680,
+      "y": 300,
+      "labelX": 680,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "P_FilaTX",
+      "initialMarking": 0,
+      "stringMarking": "0",
+      "initialStringMarking": "0",
+      "id": "p7",
+      "x": 880,
+      "y": 300,
+      "labelX": 880,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "P_Link",
+      "initialMarking": 1,
+      "stringMarking": "N_LINK",
+      "initialStringMarking": "N_LINK",
+      "id": "p8",
+      "x": 1080,
+      "y": 182.00332526888644,
+      "labelX": 1080,
+      "labelY": 232.12884465150483
+    },
+    {
+      "name": "P_TX",
+      "initialMarking": 0,
+      "stringMarking": "0",
+      "initialStringMarking": "0",
+      "id": "p9",
+      "x": 1080,
+      "y": 300,
+      "labelX": 1080,
+      "labelY": 351.8868208228317
+    }
+  ],
+  "definitions": [
+    {
+      "name": "AD",
+      "type": "DOUBLE",
+      "value": "0.016667",
+      "id": "def1"
+    },
+    {
+      "name": "T_PROC",
+      "type": "DOUBLE",
+      "value": "0.05",
+      "id": "def2"
+    },
+    {
+      "name": "T_TX",
+      "type": "DOUBLE",
+      "value": "0.01",
+      "id": "def3"
+    },
+    {
+      "name": "K",
+      "type": "INTEGER",
+      "value": "32",
+      "id": "def4"
+    },
+    {
+      "name": "N_CPU",
+      "type": "INTEGER",
+      "value": "4",
+      "id": "def5"
+    },
+    {
+      "name": "N_LINK",
+      "type": "INTEGER",
+      "value": "1",
+      "id": "def6"
+    }
+  ],
+  "rewardMeasures": [
+    {
+      "name": "TP",
+      "expression": "(E{#P_TX} / T_TX)",
+      "id": "rm0"
+    },
+    {
+      "name": "DP",
+      "expression": "P{#P_Buffer = 0} * 100",
+      "id": "rm1"
+    },
+    {
+      "name": "MRT",
+      "expression": "(E{#P_FilaCPU} + E{#P_Proc} + E{#P_FilaTX} + E{#P_TX}) / (E{#P_TX} / T_TX)",
+      "id": "rm2"
+    },
+    {
+      "name": "MQT",
+      "expression": "(E{#P_FilaCPU} + E{#P_FilaTX}) / (E{#P_TX} / T_TX)",
+      "id": "rm3"
+    },
+    {
+      "name": "U_CPU",
+      "expression": "(E{#P_Proc} / N_CPU) * 100",
+      "id": "rm4"
+    },
+    {
+      "name": "U_LINK",
+      "expression": "(E{#P_TX} / N_LINK) * 100",
+      "id": "rm5"
+    }
+  ],
+  "transitions": [
+    {
+      "name": "T_Chegada",
+      "type": "TIMED",
+      "firingPolicy": "SINGLE_SERVER",
+      "raceType": "RACE_WITH_ENABLING_MEMORY",
+      "priority": 1,
+      "inputArcs": [
+        {
+          "type": "INPUT",
+          "place": "P_Chegada",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "outputArcs": [
+        {
+          "type": "OUTPUT",
+          "place": "P_Chegada",
+          "multiplicity": 1,
+          "weight": 1
+        },
+        {
+          "type": "OUTPUT",
+          "place": "P_Pedido",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "inhibitorArcs": [],
+      "distribution": {
+        "type": "exponential",
+        "parameters": {
+          "Mean delay": "AD"
+        }
+      },
+      "id": "t1",
+      "x": 180,
+      "y": 300,
+      "labelX": 176.5522297840786,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "T_Admite",
+      "type": "IMMEDIATE",
+      "firingPolicy": "SINGLE_SERVER",
+      "raceType": "RACE_WITH_ENABLING_MEMORY",
+      "priority": 1,
+      "inputArcs": [
+        {
+          "type": "INPUT",
+          "place": "P_Pedido",
+          "multiplicity": 1,
+          "weight": 1
+        },
+        {
+          "type": "INPUT",
+          "place": "P_Buffer",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "outputArcs": [
+        {
+          "type": "OUTPUT",
+          "place": "P_FilaCPU",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "inhibitorArcs": [],
+      "weight": 1,
+      "id": "t2",
+      "x": 380,
+      "y": 300,
+      "labelX": 347.9127361198854,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "T_Descarte",
+      "type": "IMMEDIATE",
+      "firingPolicy": "SINGLE_SERVER",
+      "raceType": "RACE_WITH_ENABLING_MEMORY",
+      "priority": 1,
+      "inputArcs": [
+        {
+          "type": "INPUT",
+          "place": "P_Pedido",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "outputArcs": [],
+      "inhibitorArcs": [
+        {
+          "type": "INHIBITOR",
+          "place": "P_Buffer",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "weight": 1,
+      "id": "t3",
+      "x": 280,
+      "y": 438.82352941176464,
+      "labelX": 272.3699547245107,
+      "labelY": 490.7103502345963
+    },
+    {
+      "name": "T_IniciaProc",
+      "type": "IMMEDIATE",
+      "firingPolicy": "SINGLE_SERVER",
+      "raceType": "RACE_WITH_ENABLING_MEMORY",
+      "priority": 1,
+      "inputArcs": [
+        {
+          "type": "INPUT",
+          "place": "P_FilaCPU",
+          "multiplicity": 1,
+          "weight": 1
+        },
+        {
+          "type": "INPUT",
+          "place": "P_CPU",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "outputArcs": [
+        {
+          "type": "OUTPUT",
+          "place": "P_Proc",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "inhibitorArcs": [],
+      "weight": 1,
+      "id": "t4",
+      "x": 580,
+      "y": 300,
+      "labelX": 580,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "T_Proc",
+      "type": "TIMED",
+      "firingPolicy": "INFINITY_SERVER",
+      "raceType": "RACE_WITH_ENABLING_MEMORY",
+      "priority": 1,
+      "inputArcs": [
+        {
+          "type": "INPUT",
+          "place": "P_Proc",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "outputArcs": [
+        {
+          "type": "OUTPUT",
+          "place": "P_CPU",
+          "multiplicity": 1,
+          "weight": 1
+        },
+        {
+          "type": "OUTPUT",
+          "place": "P_FilaTX",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "inhibitorArcs": [],
+      "distribution": {
+        "type": "exponential",
+        "parameters": {
+          "Mean delay": "T_PROC"
+        }
+      },
+      "id": "t5",
+      "x": 780,
+      "y": 300,
+      "labelX": 780,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "T_IniciaTX",
+      "type": "IMMEDIATE",
+      "firingPolicy": "SINGLE_SERVER",
+      "raceType": "RACE_WITH_ENABLING_MEMORY",
+      "priority": 1,
+      "inputArcs": [
+        {
+          "type": "INPUT",
+          "place": "P_FilaTX",
+          "multiplicity": 1,
+          "weight": 1
+        },
+        {
+          "type": "INPUT",
+          "place": "P_Link",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "outputArcs": [
+        {
+          "type": "OUTPUT",
+          "place": "P_TX",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "inhibitorArcs": [],
+      "weight": 1,
+      "id": "t6",
+      "x": 980,
+      "y": 300,
+      "labelX": 980,
+      "labelY": 351.8868208228317
+    },
+    {
+      "name": "T_TX",
+      "type": "TIMED",
+      "firingPolicy": "INFINITY_SERVER",
+      "raceType": "RACE_WITH_ENABLING_MEMORY",
+      "priority": 1,
+      "inputArcs": [
+        {
+          "type": "INPUT",
+          "place": "P_TX",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "outputArcs": [
+        {
+          "type": "OUTPUT",
+          "place": "P_Link",
+          "multiplicity": 1,
+          "weight": 1
+        },
+        {
+          "type": "OUTPUT",
+          "place": "P_Buffer",
+          "multiplicity": 1,
+          "weight": 1
+        }
+      ],
+      "inhibitorArcs": [],
+      "distribution": {
+        "type": "exponential",
+        "parameters": {
+          "Mean delay": "T_TX"
+        }
+      },
+      "id": "t7",
+      "x": 1174.9133031496738,
+      "y": 300,
+      "labelX": 1157.1098641735318,
+      "labelY": 351.8868208228317
+    }
+  ],
+  "visualElements": [
+    {
+      "id": "ve1",
+      "type": "rectangle",
+      "x": 21.386716536259723,
+      "y": 91.86356885443215,
+      "width": 391.57448838836234,
+      "height": 424.60854391349403,
+      "color": "#3b82f6",
+      "fillColor": "#FFC067",
+      "fillOpacity": 10,
+      "borderColor": "#FFC067",
+      "borderRadius": 4,
+      "textColor": "var(--color-text-primary)"
+    },
+    {
+      "id": "ve2",
+      "type": "rectangle",
+      "x": 430.24865605879637,
+      "y": 89.07060236023742,
+      "width": 392.6721043333892,
+      "height": 317.1837616738858,
+      "color": "#3b82f6",
+      "fillColor": "#B39EB5",
+      "fillOpacity": 10,
+      "borderColor": "#B39EB5",
+      "borderRadius": 4,
+      "textColor": "var(--color-text-primary)"
+    },
+    {
+      "id": "ve4",
+      "type": "text",
+      "x": 56,
+      "y": 114.00332526888644,
+      "width": 220,
+      "height": 44,
+      "color": "#3b82f6",
+      "borderColor": "#3b82f6",
+      "fontSize": 20,
+      "textColor": "var(--color-text-primary)",
+      "text": "Admissão e Buffer",
+      "layer": "back"
+    },
+    {
+      "id": "ve3",
+      "type": "rectangle",
+      "x": 843.0422168869432,
+      "y": 93.01232260236726,
+      "width": 392.6721043333892,
+      "height": 313.242041431756,
+      "color": "#3b82f6",
+      "fillColor": "#AEC6CF",
+      "fillOpacity": 10,
+      "borderColor": "#AEC6CF",
+      "borderRadius": 4,
+      "textColor": "var(--color-text-primary)"
+    },
+    {
+      "id": "ve5",
+      "type": "text",
+      "x": 468,
+      "y": 108.73182224226326,
+      "width": 244,
+      "height": 44,
+      "color": "#3b82f6",
+      "borderColor": "#3b82f6",
+      "fontSize": 20,
+      "textColor": "var(--color-text-primary)",
+      "text": "Processamento (CPU)",
+      "layer": "back"
+    },
+    {
+      "id": "ve6",
+      "type": "text",
+      "x": 886,
+      "y": 108.73182224226326,
+      "width": 256,
+      "height": 44,
+      "color": "#3b82f6",
+      "borderColor": "#3b82f6",
+      "fontSize": 20,
+      "textColor": "var(--color-text-primary)",
+      "text": "Transmissão (Enlace)",
+      "layer": "back"
+    }
+  ],
+  "arcs": [
+    {
+      "id": "a1",
+      "source": "p1",
+      "target": "t1",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a2",
+      "source": "t1",
+      "target": "p1",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a3",
+      "source": "t1",
+      "target": "p2",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a4",
+      "source": "p2",
+      "target": "t2",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a5",
+      "source": "p3",
+      "target": "t2",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a6",
+      "source": "t2",
+      "target": "p4",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a7",
+      "source": "p2",
+      "target": "t3",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a8",
+      "source": "p4",
+      "target": "t4",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a9",
+      "source": "p5",
+      "target": "t4",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a10",
+      "source": "t4",
+      "target": "p6",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a11",
+      "source": "p6",
+      "target": "t5",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a12",
+      "source": "t5",
+      "target": "p5",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a13",
+      "source": "t5",
+      "target": "p7",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a14",
+      "source": "p7",
+      "target": "t6",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a15",
+      "source": "p8",
+      "target": "t6",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a16",
+      "source": "t6",
+      "target": "p9",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a17",
+      "source": "p9",
+      "target": "t7",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a18",
+      "source": "t7",
+      "target": "p8",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "straight"
+    },
+    {
+      "id": "a19",
+      "source": "t7",
+      "target": "p3",
+      "type": "normal",
+      "weight": "1",
+      "lineType": "right-angle",
+      "waypoints": [
+        {
+          "x": 1174.5018799519783,
+          "y": 538.6988356547218
+        },
+        {
+          "x": 380,
+          "y": 538.6988356547218
+        }
+      ],
+      "exitY0": 300,
+      "knee0x": 380,
+      "midY": 460,
+      "knee1x": 390,
+      "exitY3": 460,
+      "sourceAnchorAngle": 90,
+      "targetAnchorAngle": 90
+    },
+    {
+      "id": "a20",
+      "source": "p3",
+      "target": "t3",
+      "type": "inhibitor",
+      "weight": "1",
+      "sourceAnchor": "left",
+      "targetAnchorAngle": 13.727565869485943,
+      "lineType": "straight"
+    }
+  ],
+  "chartSquare": false,
+  "timeUnit": "ms"
+}
