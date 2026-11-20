@@ -31,4 +31,4 @@ confiança de 95% e erro relativo máximo de 5%.
 
 ## Vídeo de apresentação
 
-[LINK DO VÍDEO]
+[[LINK DO VÍDEO](https://youtu.be/3973aiMhEec)]
